@@ -1,0 +1,11 @@
+title
+area
+price
+link
+pub_date
+address
+city
+bedroom
+size
+content
+update_date
