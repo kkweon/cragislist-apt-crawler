@@ -1,5 +1,6 @@
 # Craigslist Apartment Crawler
-==========================
+crawl apartment and update the database
+targetsite: https://sfbay.craigslist.org/search/apa
 
 # Requirements
 1. scrapy
