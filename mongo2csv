@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+mongoexport --db apt --collection craigslist --type csv --fieldFile fieldName.txt --out result.csv
