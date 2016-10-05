@@ -61,6 +61,8 @@ class ClSpider(scrapy.Spider):
         city = response.xpath("//span[@class='postingtitletext']/small/text()").extract()
         pub_date = response.xpath("//time[@class='timeago']/@datetime").extract()[0]  # 2016-09-30T15:31-47-0700
         address = response.xpath("//div[@class='mapaddress']/text()").extract()
+        lat = response.xpath("//div[@id='map']/@data-latitude").extract()
+        lon = response.xpath("//div[@id='map']/@data-longitude").extract()
 
         item_loader.add_value('title', title)
         item_loader.add_value('price', price)
@@ -70,5 +72,7 @@ class ClSpider(scrapy.Spider):
         item_loader.add_value('bedroom', house_type)
         item_loader.add_value('size', house_type)
         item_loader.add_value('address', address)
+        item_loader.add_value('lat', lat)
+        item_loader.add_value('lon', lon)
 
         yield item_loader.load_item()

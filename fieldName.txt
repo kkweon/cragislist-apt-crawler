@@ -6,6 +6,7 @@ bedroom
 size
 caltrain_stop
 caltrain_dist
+work_dist
 link
 pub_date
 address

@@ -1,5 +1,7 @@
 # Craigslist Apartment Crawler
-crawl apartment and update the database
+crawl apartment and update the database.
+It also finds the closest Caltrain station and returns its distance.
+
 targetsite: https://sfbay.craigslist.org/search/apa
 
 # Requirements

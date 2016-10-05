@@ -4,21 +4,18 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import pymongo as pymongo
 import logging
 from datetime import datetime
 
+import pymongo as pymongo
+
 from craigslist_apt import settings
-from craigslist_apt.caltrain_stops import read_data, get_closest_caltrain
+from craigslist_apt.caltrain_stops import *
 
 CALTRAIN_DATA = read_data()
 
-class CraigslistAptPipeline(object):
-    def process_item(self, item, spider):
-        return item
 
 class MongoDBPipeline(object):
-
     def __init__(self):
         connection = pymongo.MongoClient(
             settings.MONGODB_SERVER,
@@ -35,9 +32,11 @@ class MongoDBPipeline(object):
         #         raise DropItem("Missing data!")
         data = dict(item)
         data['update_date'] = datetime.now()
-        if 'address' in data.keys():
-            if data['address'] is not None:
-                data['address'], data['caltrain_stop'], data['caltrain_dist'] = get_closest_caltrain(CALTRAIN_DATA, data['address'])
+        if 'lat' in data.keys() and 'lon' in data.keys():
+            if data['lat'] is not None and data['lon'] is not None:
+                data['address'], data['caltrain_stop'], data['caltrain_dist'] = get_closest_caltrain_by_lat_lon(CALTRAIN_DATA, data['lat'], data['lon'])
+                data['work_dist'] = get_distance_from_work(data['lat'], data['lon'])
         self.collection.update({'link': data['link']}, data, upsert=True)
         self.logger.info("Added to MongoDB database!")
-        return item
+
+        return data

@@ -28,9 +28,12 @@ def get_size(value):
         return ""
 
 
-def clean_price(value):
+def clean_number(value):
     if "$" in value:
         value = value.replace("$", "")
+        return value.strip()
+
+    else:
         return value.strip()
 
 
@@ -66,7 +69,7 @@ class CraigslistAptItem(scrapy.Item):
         output_processor=Join(),
     )
     price = scrapy.Field(
-        input_processor=MapCompose(clean_price),
+        input_processor=MapCompose(clean_number),
         output_processor=TakeFirst(),
     )
     pub_date = scrapy.Field(
@@ -101,5 +104,14 @@ class CraigslistAptItem(scrapy.Item):
     )
     size = scrapy.Field(
         input_processor=MapCompose(get_size),
+        output_processor=Join(),
+    )
+
+    lat = scrapy.Field(
+        input_processor=MapCompose(clean_number),
+        output_processor=Join(),
+    )
+    lon = scrapy.Field(
+        input_processor=MapCompose(clean_number),
         output_processor=Join(),
     )
