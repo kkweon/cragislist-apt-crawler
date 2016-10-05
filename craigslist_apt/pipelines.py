@@ -5,12 +5,13 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo as pymongo
-#from scrapy.exceptions import DropItem
 import logging
 from datetime import datetime
 
 from craigslist_apt import settings
+from craigslist_apt.caltrain_stops import read_data, get_closest_caltrain
 
+CALTRAIN_DATA = read_data()
 
 class CraigslistAptPipeline(object):
     def process_item(self, item, spider):
@@ -34,6 +35,9 @@ class MongoDBPipeline(object):
         #         raise DropItem("Missing data!")
         data = dict(item)
         data['update_date'] = datetime.now()
+        if 'address' in data.keys():
+            if data['address'] is not None:
+                data['address'], data['caltrain_stop'], data['caltrain_dist'] = get_closest_caltrain(CALTRAIN_DATA, data['address'])
         self.collection.update({'link': data['link']}, data, upsert=True)
         self.logger.info("Added to MongoDB database!")
         return item

@@ -24,7 +24,7 @@ NEWSPIDER_MODULE = 'craigslist_apt.spiders'
 #USER_AGENT = 'craigslist_apt (+http://www.yourdomain.com)'
 
 # CALTRAIN DATA FILE
-CALTRAIN_DATA = "../data/stops.txt"
+CALTRAIN_DATA = "data/stops.txt"
 
 # Google Maps Geocoding API KEY
 GOOGLEMAP_API_KEY = "AIzaSyDeE6mFbvJWC6BcrCoCn4JsX-KrLVp4kgI"

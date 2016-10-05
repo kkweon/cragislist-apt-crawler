@@ -4,6 +4,8 @@ price
 city
 bedroom
 size
+caltrain_stop
+caltrain_dist
 link
 pub_date
 address

@@ -1,21 +1,28 @@
-from settings import GOOGLEMAP_API_KEY
-import requests
 import json
+
+import requests
+
+from craigslist_apt.settings import GOOGLEMAP_API_KEY
 
 URL = "https://maps.googleapis.com/maps/api/geocode/json?address="
 APIKEY = "&key=" + GOOGLEMAP_API_KEY
 
 
+def get_lat_lon(address):
+    req = requests.get(URL + address + APIKEY)
+    data = json.loads(req.text)
 
-test_address = "1429 Sunnydale Ave"
+    status = data['status']
 
-req = requests.get(URL + test_address + APIKEY)
-data = json.loads(req.text)
+    if status == 'OK':
+        results = data['results'][0]
+        formal_address = results['formatted_address']
+        lat = results['geometry']['location']['lat']
+        lon = results['geometry']['location']['lng']
 
-print(data)
-
-results = data['results']
-
-print(results)
+        return formal_address, lat, lon
 
 
+if __name__ == "__main__":
+    test_address = "1429 Sunnydale Ave"
+    print(get_lat_lon(test_address))

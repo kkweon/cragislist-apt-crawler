@@ -14,7 +14,7 @@ from scrapy.loader.processors import Join, MapCompose, TakeFirst
 
 def get_bedroom(value):
     try:
-        return re.findall(r"(\d+)br", value)[0]
+        return re.findall(r"(\d+)br", value)[0].strip()
 
     except:
         return ""
@@ -22,7 +22,7 @@ def get_bedroom(value):
 
 def get_size(value):
     try:
-        return re.findall(r"(\d+)ft", value)[0]
+        return re.findall(r"(\d+)ft", value)[0].strip()
 
     except:
         return ""
