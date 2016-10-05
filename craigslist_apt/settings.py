@@ -23,6 +23,12 @@ NEWSPIDER_MODULE = 'craigslist_apt.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'craigslist_apt (+http://www.yourdomain.com)'
 
+# CALTRAIN DATA FILE
+CALTRAIN_DATA = "../data/stops.txt"
+
+# Google Maps Geocoding API KEY
+GOOGLEMAP_API_KEY = "AIzaSyDeE6mFbvJWC6BcrCoCn4JsX-KrLVp4kgI"
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 

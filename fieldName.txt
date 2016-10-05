@@ -1,11 +1,12 @@
 title
 area
 price
-link
-pub_date
-address
 city
 bedroom
 size
+link
+pub_date
+address
 content
 update_date
+
