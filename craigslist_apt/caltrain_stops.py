@@ -88,7 +88,6 @@ def get_closest_caltrain_by_lat_lon(caltrain_stops, lat, lon):
     result = geocoding.get_address_by_lat_lon(lat, lon)
     if result is not None:
         formal_name, lat, lon = result
-        formal_name, lat, lon = result
         min_dist = 10000000000
         station = None
 
@@ -101,7 +100,16 @@ def get_closest_caltrain_by_lat_lon(caltrain_stops, lat, lon):
         return formal_name, station.name, min_dist
 
     else:
-        return "", "", ""
+        min_dist = 10000000000
+        station = None
+
+        for cal_stop in caltrain_stops:
+            dist = cal_stop.get_distance(lat, lon)
+            if dist < min_dist:
+                station = cal_stop
+                min_dist = dist
+
+        return "", station.name, min_dist
 
 
 if __name__ == "__main__":

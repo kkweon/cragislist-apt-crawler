@@ -25,8 +25,11 @@ NEWSPIDER_MODULE = 'craigslist_apt.spiders'
 
 # CALTRAIN DATA FILE
 CALTRAIN_DATA = "data/stops.txt"
+
+# WORK GEO INFO
 WORK_LAT = 37.776984
 WORK_LON = -122.393836
+
 # Google Maps Geocoding API KEY
 GOOGLEMAP_API_KEY = "AIzaSyDeE6mFbvJWC6BcrCoCn4JsX-KrLVp4kgI"
 
