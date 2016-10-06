@@ -3,3 +3,4 @@ result.csv
 *.pyc
 *.xls*
 .DS_S*
+__pycache__
