@@ -24,6 +24,7 @@ def get_lat_lon(address):
 
         return formal_address, lat, lon
 
+
 def get_address_by_lat_lon(lat, lon):
     #https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY
     URL = "https://maps.googleapis.com/maps/api/geocode/json?latlng="
@@ -40,6 +41,9 @@ def get_address_by_lat_lon(lat, lon):
         lon = results['geometry']['location']['lng']
 
         return formal_address, lat, lon
+
+    else:
+        print(status)
 
 
 if __name__ == "__main__":
