@@ -1,7 +1,5 @@
 .idea
 result.csv
 *.pyc
-__pycache__/
-__pycache__/*
 *.xls*
 .DS_S*

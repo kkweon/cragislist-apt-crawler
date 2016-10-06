@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
 
-from craigslist_apt import settings
-
 from craigslist_apt.geocoding import *
 
 
@@ -46,17 +44,18 @@ def get_distance_from_work(lat, lon):
     work_lat = settings.WORK_LAT
     work_lon = settings.WORK_LON
 
-    return get_walking_from_to(work_lat, work_lon, lat, lon)
-    # lon_diff = np.deg2rad(lon - work_lon)
-    # lat = np.deg2rad(lat)
-    # lon = np.deg2rad(lon)
-    #
-    # lat2 = np.deg2rad(work_lat)
-    # lon2 = np.deg2rad(work_lon)
-    #
-    # a = np.sin(lat) * np.sin(lat2) + np.cos(lat) * np.cos(lat2) * np.cos(lon_diff)
-    # return np.arccos(a) * R / 1000 * 0.621371
+    if settings.USE_GOOGLE:
+        return get_walking_from_to(work_lat, work_lon, lat, lon)
+    else:
+        lon_diff = np.deg2rad(lon - work_lon)
+        lat = np.deg2rad(lat)
+        #lon = np.deg2rad(lon)
 
+        lat2 = np.deg2rad(work_lat)
+        #lon2 = np.deg2rad(work_lon)
+
+        a = np.sin(lat) * np.sin(lat2) + np.cos(lat) * np.cos(lat2) * np.cos(lon_diff)
+        return np.arccos(a) * R / 1000 * 0.621371
 
 
 def read_data(data_file=None):
@@ -86,7 +85,9 @@ def get_closest_caltrain(caltrain_stops, address):
                 station = cal_stop
                 min_dist = dist
 
-        min_dist = get_walking_time(station, lat, lon)
+        if settings.USE_GOOGLE:
+            min_dist = get_walking_time(station, lat, lon)
+
         return formal_name, station.name, min_dist
 
     else:
@@ -106,7 +107,9 @@ def get_closest_caltrain_by_lat_lon(caltrain_stops, lat, lon):
                 station = cal_stop
                 min_dist = dist
 
-        min_dist = get_walking_time(station, lat, lon)
+        if settings.USE_GOOGLE:
+            min_dist = get_walking_time(station, lat, lon)
+
         return formal_name, station.name, min_dist
 
     else:
@@ -119,7 +122,9 @@ def get_closest_caltrain_by_lat_lon(caltrain_stops, lat, lon):
                 station = cal_stop
                 min_dist = dist
 
-        min_dist = get_walking_time(station, lat, lon)
+        if settings.USE_GOOGLE:
+            min_dist = get_walking_time(station, lat, lon)
+
         return "", station.name, min_dist
 
 
@@ -129,9 +134,13 @@ def get_walking_time(cal_stop, lat, lon):
     cal_lat, cal_lon = cal_stop.get_lat_lon()
     req = requests.get(URL.format(lat, lon, cal_lat, cal_lon))
     data = json.loads(req.text)
+    status = data.get('status')
     routes = data.get('routes', None)
-    if routes is not None:
+    if status == 'OK':
         return routes[0]['legs'][0]['duration']['value'] / 60
+
+    else:
+        return status
 
 
 def get_walking_from_to(lat1, lon1, lat2, lon2):
@@ -139,8 +148,12 @@ def get_walking_from_to(lat1, lon1, lat2, lon2):
     req = requests.get(URL.format(lat1, lon1, lat2, lon2))
     data = json.loads(req.text)
     routes = data.get('routes', None)
-    if routes is not None:
+    status = data.get('status', None)
+
+    if status == 'OK':
         return routes[0]['legs'][0]['duration']['value'] / 60
+    else:
+        return status
 
 
 if __name__ == "__main__":
@@ -159,3 +172,4 @@ if __name__ == "__main__":
     print("From {}".format(get_address_by_lat_lon(test_lat, test_lon)))
     print("To {}".format(cal_stop))
     pprint(get_walking_time(cal_stop, test_lat, test_lon))
+    print(get_closest_caltrain_by_lat_lon(caltrain_data, test_lat, test_lon))
