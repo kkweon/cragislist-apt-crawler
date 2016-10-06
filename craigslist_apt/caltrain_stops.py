@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 from craigslist_apt import settings
+
 from craigslist_apt.geocoding import *
 
 
