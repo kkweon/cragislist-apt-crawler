@@ -9,7 +9,6 @@ from datetime import datetime
 
 import pymongo as pymongo
 
-from craigslist_apt import settings
 from craigslist_apt.caltrain_stops import *
 
 CALTRAIN_DATA = read_data()
@@ -34,7 +33,11 @@ class MongoDBPipeline(object):
         data['update_date'] = datetime.now()
         if 'lat' in data.keys() and 'lon' in data.keys():
             if data['lat'] is not None and data['lon'] is not None:
-                data['address'], data['caltrain_stop'], data['caltrain_dist'] = get_closest_caltrain_by_lat_lon(CALTRAIN_DATA, data['lat'], data['lon'])
+                address, data['caltrain_stop'], data['caltrain_dist'] = get_closest_caltrain_by_lat_lon(CALTRAIN_DATA,
+                                                                                                        data['lat'],
+                                                                                                        data['lon'])
+                if address != "":
+                    data['address'] = address
                 data['work_dist'] = get_distance_from_work(data['lat'], data['lon'])
         self.collection.update({'link': data['link']}, data, upsert=True)
         self.logger.info("Added to MongoDB database!")
